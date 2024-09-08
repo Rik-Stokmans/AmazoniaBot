@@ -19,5 +19,4 @@ public static partial class Core
     {
         if (!_initialized) throw new Exception("Core not initialized");
     }
-    //Hallo hoe gaat het?
 }
