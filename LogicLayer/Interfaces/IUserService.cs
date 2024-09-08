@@ -2,7 +2,7 @@ using LogicLayer.Models;
 
 namespace LogicLayer.Interfaces;
 
-public interface IUserServer
+public interface IUserService
 {
     public (DatabaseResult, User) GetUser(ulong discordId);
     

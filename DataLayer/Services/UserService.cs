@@ -3,7 +3,7 @@ using LogicLayer.Models;
 
 namespace DataLayer.Services;
 
-public class UserServer : IUserServer
+public class UserService : IUserService
 {
     public (DatabaseResult, User) GetUser(ulong discordId)
     {
