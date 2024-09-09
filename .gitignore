@@ -79,3 +79,7 @@ databasesettings.*
 external-data-dbi529428_studmysql01_fhict_local.xml
 
 *.idea/*
+
+/.git 17.34.02/*
+
+/.idea 17.34.04/*

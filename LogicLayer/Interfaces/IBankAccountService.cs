@@ -42,5 +42,7 @@ public interface IBankAccountService
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
     public DatabaseResult DeleteBankAccount(ulong discordId);
+    
+    //TODO: add a transfer method to transfer funds between two bank accounts
 
 }
