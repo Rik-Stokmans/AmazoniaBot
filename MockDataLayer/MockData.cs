@@ -1,8 +1,9 @@
 using LogicLayer.Models;
+using MockDataLayer.Services;
 
 namespace MockDataLayer;
 
-public class MockData
+public static class MockData
 {
     public static List<User> Users { get; set; } = [];
 

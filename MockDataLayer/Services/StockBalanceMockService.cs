@@ -3,7 +3,7 @@ using LogicLayer.Models;
 
 namespace MockDataLayer.Services;
 
-public class StockBalanceService : IStockBalanceService
+public class StockBalanceMockService : IStockBalanceService
 {
     public (DatabaseResult, List<StockBalance>) GetStockBalances(ulong discordId)
     {

@@ -3,7 +3,7 @@ using LogicLayer.Models;
 
 namespace MockDataLayer.Services;
 
-public class UserService : IUserService
+public class UserMockService : IUserService
 {
     public (DatabaseResult, User) GetUser(ulong discordId)
     {

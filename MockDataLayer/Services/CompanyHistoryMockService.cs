@@ -3,7 +3,7 @@ using LogicLayer.Models;
 
 namespace MockDataLayer.Services;
 
-public class CompanyHistoryService : ICompanyHistoryService
+public class CompanyHistoryMockService : ICompanyHistoryService
 {
     public (DatabaseResult, List<CompanyHistory>) GetCompanyHistory(int companyId)
     {

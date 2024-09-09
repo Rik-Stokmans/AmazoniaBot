@@ -3,7 +3,7 @@ using LogicLayer.Models;
 
 namespace MockDataLayer.Services;
 
-public class BankAccountService : IBankAccountService
+public class BankAccountMockService : IBankAccountService
 {
     public (DatabaseResult, BankAccount) GetBankAccount(ulong discordId)
     {

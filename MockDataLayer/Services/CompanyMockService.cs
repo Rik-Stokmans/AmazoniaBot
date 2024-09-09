@@ -2,7 +2,7 @@ using LogicLayer.Interfaces;
 using LogicLayer.Models;
 
 namespace MockDataLayer.Services;
-public class CompanyService : ICompanyService
+public class CompanyMockService : ICompanyService
 {
     public (DatabaseResult, Company) GetCompany(int id)
     {
