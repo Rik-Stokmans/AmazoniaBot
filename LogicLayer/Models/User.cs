@@ -7,7 +7,7 @@ namespace LogicLayer.Models;
 /// <param name="minecraftUuid">The unique Minecraft UUID of the user.</param>
 /// <param name="username">The username of the user.</param>
 /// <param name="password">The password of the user.</param>
-public abstract class User(ulong discordId, string minecraftUuid, string username, string password)
+public class User(ulong discordId, string minecraftUuid, string username, string password)
 {
     /// <summary>
     /// Gets or sets the Discord ID of the user.

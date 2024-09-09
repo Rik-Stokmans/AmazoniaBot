@@ -18,5 +18,10 @@ public enum DatabaseResult
     /// <summary>
     /// Indicates that the database operation failed because of a duplicate entry.
     /// </summary>
-    Duplicate
+    Duplicate,
+    
+    /// <summary>
+    /// indicates that the database operation failed because the entry was not found.
+    /// </summary>
+    NotFound
 }
