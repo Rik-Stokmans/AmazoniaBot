@@ -68,7 +68,7 @@ public class Tests
             new StockBalance(5, 2, 1)
         ];
         
-        Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService());
+        Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new LoginCredentialService());
     }
 
     [Test]
@@ -148,5 +148,23 @@ public class Tests
         
         //if all tests pass
         Assert.Pass();
+    }
+
+    [Test]
+    public void AuthenticateUserTests()
+    {
+        if (!Core.RegisterAccount("duffie13", "password!", "password!", "testuuid", 100)) Assert.Fail();
+        
+        foreach (var keyValuePair in MockData.LoginCredentials)
+        {
+            Console.WriteLine(keyValuePair.Key);
+        }
+        
+        var code = MockData.LoginCredentials.First().Key;
+        
+        
+        if (!Core.VerifyAccount(code)) Assert.Fail();
+        
+        MockData.Users.ForEach(x => Console.WriteLine(x.DiscordId + ": " + x.Username + " " + x.MinecraftUuid + " " + x.Password));
     }
 }

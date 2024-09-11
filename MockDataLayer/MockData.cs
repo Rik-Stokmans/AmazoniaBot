@@ -1,3 +1,4 @@
+using System.Collections;
 using LogicLayer.Models;
 using MockDataLayer.Services;
 
@@ -14,4 +15,6 @@ public static class MockData
     public static List<Company> Companies { get; set; } = [];
 
     public static List<CompanyHistory> CompanyHistories { get; set; } = [];
+    
+    public static Dictionary<string, User> LoginCredentials { get; set; } = [];
 }

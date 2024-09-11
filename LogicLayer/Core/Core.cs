@@ -17,9 +17,11 @@ public static partial class Core
     /// <remarks>
     /// This method sets the internal state to indicate that initialization is complete.
     /// </remarks>
-    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService)
+    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ILoginCredentialsService loginCredentialsService)
     {
         _bankAccountService = bankAccountService;
+        _userService = userService;
+        _loginCredentialsService = loginCredentialsService;
         _initialized = true;
     }
     
