@@ -1,6 +1,6 @@
 using LogicLayer.Models;
 
-namespace LogicLayer.Interfaces;
+namespace LogicLayer.Interfaces.DataServices.Transient;
 
 public interface ILoginCredentialsService
 {
