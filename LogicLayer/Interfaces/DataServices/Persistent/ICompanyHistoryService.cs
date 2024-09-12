@@ -13,7 +13,7 @@ public interface ICompanyHistoryService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{CompanyHistory}"/>: A list of company history records for the specified company.
     /// </returns>
-    public (DatabaseResult, List<CompanyHistory>) GetCompanyHistory(int companyId);
+    public Task<(DatabaseResult, List<CompanyHistory>)> GetCompanyHistory(int companyId);
 
     /// <summary>
     /// Retrieves the complete history of all companies in the system.
@@ -23,7 +23,7 @@ public interface ICompanyHistoryService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{CompanyHistory}"/>: A list of all company history records in the system.
     /// </returns>
-    public (DatabaseResult, List<CompanyHistory>) GetAllCompanyHistory();
+    public Task<(DatabaseResult, List<CompanyHistory>)> GetAllCompanyHistory();
 
     /// <summary>
     /// Creates or updates a company history record in the system.
@@ -32,6 +32,6 @@ public interface ICompanyHistoryService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the operation.
     /// </returns>
-    public DatabaseResult CreateUpdateCompanyHistory(CompanyHistory companyHistory);
+    public Task<DatabaseResult> CreateUpdateCompanyHistory(CompanyHistory companyHistory);
 
 }

@@ -16,14 +16,15 @@ public static partial class Core
     /// A <see cref="bool"/> indicating whether the bank account was successfully registered. 
     /// Returns <c>false</c> if the account already exists.
     /// </returns>
-    public static bool RegisterBankAccount(ulong discordId)
+    public static async Task<bool> RegisterBankAccount(ulong discordId)
     {
         CheckInit();
 
-        var (result, bankAccount) = _bankAccountService.GetBankAccount(discordId);
+        var (result, bankAccount) = await _bankAccountService.GetBankAccount(discordId);
         if (result == DatabaseResult.Success) return false;
-
-        _bankAccountService.CreateUpdateBankAccount(new BankAccount(discordId, 0));
+        
+        await _bankAccountService.CreateUpdateBankAccount(new BankAccount(discordId, 0));
+        
         return true;
     }
 
@@ -36,25 +37,25 @@ public static partial class Core
     /// A <see cref="bool"/> indicating whether the balance was successfully updated. 
     /// Returns <c>false</c> if the account does not exist.
     /// </returns>
-    public static bool ChangeBalance(ulong discordId, double value)
+    public static async Task<bool> ChangeBalance(ulong discordId, double value)
     {
         CheckInit();
 
-        var (result, bankAccount) = _bankAccountService.GetBankAccount(discordId);
+        var (result, bankAccount) = await _bankAccountService.GetBankAccount(discordId);
         if (result != DatabaseResult.Success) return false;
 
         bankAccount.Balance += value;
-        _bankAccountService.CreateUpdateBankAccount(bankAccount);
+        await _bankAccountService.CreateUpdateBankAccount(bankAccount);
         return true;
     }
 
     
     //TODO: replace this with the transfer method in IBankAccountService
-    public static bool TransferBalance(ulong sender, ulong receiver, double value)
+    public static async Task<bool> TransferBalance(ulong sender, ulong receiver, double value)
     {
         if (sender == receiver || value <= 0) return false;
         
-        var (result, bankAccounts) = _bankAccountService.GetAllBankAccounts();
+        var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts();
         if (result != DatabaseResult.Success) return false;
 
         var senderAccount = bankAccounts.Find(ba => ba.DiscordId == sender);
@@ -67,8 +68,8 @@ public static partial class Core
         senderAccount.Balance -= value;
         receiverAccount.Balance += value;
 
-        _bankAccountService.CreateUpdateBankAccount(senderAccount);
-        _bankAccountService.CreateUpdateBankAccount(receiverAccount);
+        await _bankAccountService.CreateUpdateBankAccount(senderAccount);
+        await _bankAccountService.CreateUpdateBankAccount(receiverAccount);
         return true;
     }
     
@@ -80,11 +81,11 @@ public static partial class Core
     /// <returns>
     /// A <see cref="bool"/> indicating whether the account was successfully deleted.
     /// </returns>
-    public static bool DeleteBankAccount(ulong discordId)
+    public static async Task<bool> DeleteBankAccount(ulong discordId)
     {
         CheckInit();
 
-        var result = _bankAccountService.DeleteBankAccount(discordId);
+        var result = await _bankAccountService.DeleteBankAccount(discordId);
         return result == DatabaseResult.Success;
     }
 
@@ -94,11 +95,11 @@ public static partial class Core
     /// <returns>
     /// A list of <see cref="BankAccount"/> objects representing all bank accounts, or an empty list if the retrieval fails.
     /// </returns>
-    public static List<BankAccount> GetAllBankAccounts()
+    public static async Task<List<BankAccount>> GetAllBankAccounts()
     {
         CheckInit();
 
-        var (result, bankAccounts) = _bankAccountService.GetAllBankAccounts();
+        var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts();
         return result == DatabaseResult.Success ? bankAccounts : [];
     }
 }

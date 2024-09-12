@@ -4,9 +4,9 @@ namespace LogicLayer.Interfaces;
 
 public interface ILoginCredentialsService
 {
-    public (DatabaseResult, string) StoreUserWithCode(User user);
+    public Task<(DatabaseResult, string)> StoreUserWithCode(User user);
     
-    public (DatabaseResult, User) GetUserFromCode(string code);
+    public Task<(DatabaseResult, User)> GetUserFromCode(string code);
     
-    public DatabaseResult RemoveCode(string code);
+    public Task<DatabaseResult> RemoveCode(string code);
 }

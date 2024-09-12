@@ -9,25 +9,25 @@ public static partial class Core
     private static IUserService _userService;
     private static ILoginCredentialsService _loginCredentialsService;
 
-    private static bool CreateAccount(User user)
+    private static async  Task<bool> CreateAccount(User user)
     {
         CheckInit();
         
-        return _userService.CreateUpdateUser(user) == DatabaseResult.Success;
+        return await _userService.CreateUpdateUser(user) == DatabaseResult.Success;
     }
     
-    public static bool RegisterAccount(string username, string password, string passwordConfirmation, string minecraftUuid, ulong discordId)
+    public static async Task<bool> RegisterAccount(string username, string password, string minecraftName, ulong discordId)
     {
         CheckInit();
         
-        if (password != passwordConfirmation) return false;
+        //TODO: transfer this to the authentication project
         
-        var user = new User(discordId, minecraftUuid, username, PasswordProtector.Protect(password));
+        var user = new User(discordId, minecraftName, username, PasswordProtector.Protect(password));
         
         //TODO make sure this code is unique
         var verificationCode = Verification.GenerateVerificationCode();
         
-        var (result, code) = _loginCredentialsService.StoreUserWithCode(user);
+        var (result, code) = await _loginCredentialsService.StoreUserWithCode(user);
         
         //TODO Send verification code to user
         //TODO convert discord handle to discord id
@@ -35,17 +35,17 @@ public static partial class Core
         return result == DatabaseResult.Success;
     }
     
-    public static bool VerifyAccount(string code)
+    public static async Task<bool> VerifyAccount(string code)
     {
         CheckInit();
         
-        var (result, user) = _loginCredentialsService.GetUserFromCode(code);
+        var (result, user) = await _loginCredentialsService.GetUserFromCode(code);
         
         if (result != DatabaseResult.Success) return false;
         
-        _loginCredentialsService.RemoveCode(code);
+        await _loginCredentialsService.RemoveCode(code);
         
-        return CreateAccount(user);
+        return await CreateAccount(user);
     }
 
 }
