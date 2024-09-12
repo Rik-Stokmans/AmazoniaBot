@@ -13,7 +13,7 @@ public interface IBankAccountService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="BankAccount"/>: The bank account associated with the specified Discord ID, or null if not found.
     /// </returns>
-    public (DatabaseResult, BankAccount) GetBankAccount(ulong discordId);
+    public Task<(DatabaseResult, BankAccount)> GetBankAccount(ulong discordId);
 
     /// <summary>
     /// Retrieves all bank accounts stored in the system.
@@ -23,7 +23,7 @@ public interface IBankAccountService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{BankAccount}"/>: A list of all bank accounts in the system.
     /// </returns>
-    public (DatabaseResult, List<BankAccount>) GetAllBankAccounts();
+    public Task<(DatabaseResult, List<BankAccount>)> GetAllBankAccounts();
 
     /// <summary>
     /// Creates a new bank account or updates an existing one in the system.
@@ -32,7 +32,7 @@ public interface IBankAccountService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the operation.
     /// </returns>
-    public DatabaseResult CreateUpdateBankAccount(BankAccount bankAccount);
+    public Task<DatabaseResult> CreateUpdateBankAccount(BankAccount bankAccount);
 
     /// <summary>
     /// Deletes the bank account associated with the specified Discord ID.
@@ -41,7 +41,7 @@ public interface IBankAccountService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
-    public DatabaseResult DeleteBankAccount(ulong discordId);
+    public Task<DatabaseResult> DeleteBankAccount(ulong discordId);
     
     //TODO: add a transfer method to transfer funds between two bank accounts
 

@@ -13,7 +13,7 @@ public interface IUserService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="User"/>: The user object associated with the specified Discord ID, or null if not found.
     /// </returns>
-    public (DatabaseResult, User) GetUser(ulong discordId);
+    public Task<(DatabaseResult, User)> GetUser(ulong discordId);
 
     /// <summary>
     /// Retrieves a list of all users in the system.
@@ -23,7 +23,7 @@ public interface IUserService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{User}"/>: A list of all users in the system.
     /// </returns>
-    public (DatabaseResult, List<User>) GetAllUsers();
+    public Task<(DatabaseResult, List<User>)> GetAllUsers();
 
     /// <summary>
     /// Creates a new user or updates an existing user's information in the system.
@@ -32,7 +32,7 @@ public interface IUserService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the create or update operation.
     /// </returns>
-    public DatabaseResult CreateUpdateUser(User user);
+    public Task<DatabaseResult> CreateUpdateUser(User user);
 
     /// <summary>
     /// Deletes the user associated with the specified Discord ID.
@@ -41,6 +41,6 @@ public interface IUserService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
-    public DatabaseResult DeleteUser(ulong discordId);
+    public Task<DatabaseResult> DeleteUser(ulong discordId);
 
 }

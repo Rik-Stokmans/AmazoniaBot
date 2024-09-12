@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockDataLayer", "MockDataLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{844ACF54-74E4-4196-9CD0-8811394DD4C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{98F6585B-A5E9-432C-84EF-408E3CC34E60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{844ACF54-74E4-4196-9CD0-8811394DD4C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{844ACF54-74E4-4196-9CD0-8811394DD4C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{844ACF54-74E4-4196-9CD0-8811394DD4C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F6585B-A5E9-432C-84EF-408E3CC34E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F6585B-A5E9-432C-84EF-408E3CC34E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F6585B-A5E9-432C-84EF-408E3CC34E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F6585B-A5E9-432C-84EF-408E3CC34E60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -13,7 +13,7 @@ public interface IStockBalanceService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{StockBalance}"/>: A list of stock balances associated with the specified Discord ID.
     /// </returns>
-    public (DatabaseResult, List<StockBalance>) GetStockBalances(ulong discordId);
+    public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(ulong discordId);
 
     /// <summary>
     /// Retrieves all stock balances for a specific company based on the provided company ID.
@@ -24,7 +24,7 @@ public interface IStockBalanceService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{StockBalance}"/>: A list of stock balances associated with the specified company.
     /// </returns>
-    public (DatabaseResult, List<StockBalance>) GetAllStockBalances(int companyId);
+    public Task<(DatabaseResult, List<StockBalance>)> GetAllStockBalances(int companyId);
 
     /// <summary>
     /// Retrieves all stock balances in the system.
@@ -34,7 +34,7 @@ public interface IStockBalanceService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{StockBalance}"/>: A list of all stock balances in the system.
     /// </returns>
-    public (DatabaseResult, List<StockBalance>) GetAllStockBalances();
+    public Task<(DatabaseResult, List<StockBalance>)> GetAllStockBalances();
 
     /// <summary>
     /// Creates a new stock balance or updates an existing one in the system.
@@ -43,7 +43,7 @@ public interface IStockBalanceService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the operation.
     /// </returns>
-    public DatabaseResult CreateUpdateStockBalance(StockBalance stockBalance);
+    public Task<DatabaseResult> CreateUpdateStockBalance(StockBalance stockBalance);
 
     /// <summary>
     /// Deletes a stock balance for a specific user and company.
@@ -53,5 +53,5 @@ public interface IStockBalanceService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
-    public DatabaseResult DeleteStockBalance(ulong discordId, int companyId);
+    public Task<DatabaseResult> DeleteStockBalance(ulong discordId, int companyId);
 }

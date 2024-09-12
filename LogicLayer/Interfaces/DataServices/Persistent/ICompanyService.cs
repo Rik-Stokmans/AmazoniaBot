@@ -13,7 +13,7 @@ public interface ICompanyService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="Company"/>: The company object associated with the specified ID, or null if not found.
     /// </returns>
-    public (DatabaseResult, Company) GetCompany(int id);
+    public Task<(DatabaseResult, Company)> GetCompany(int id);
 
     /// <summary>
     /// Retrieves a list of all companies in the system.
@@ -23,7 +23,7 @@ public interface ICompanyService
     /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
     /// - <see cref="List{Company}"/>: A list of all company records in the system.
     /// </returns>
-    public (DatabaseResult, List<Company>) GetAllCompanies();
+    public Task<(DatabaseResult, List<Company>)> GetAllCompanies();
 
     /// <summary>
     /// Creates a new company or updates an existing company's information in the system.
@@ -32,6 +32,6 @@ public interface ICompanyService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the create or update operation.
     /// </returns>
-    public DatabaseResult CreateUpdateCompany(Company company);
+    public Task<DatabaseResult> CreateUpdateCompany(Company company);
 
 }

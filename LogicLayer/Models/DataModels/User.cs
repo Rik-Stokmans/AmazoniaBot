@@ -4,10 +4,10 @@ namespace LogicLayer.Models;
 /// Represents a user with a Discord ID, Minecraft UUID, username, and password.
 /// </summary>
 /// <param name="discordId">The unique Discord ID of the user.</param>
-/// <param name="minecraftUuid">The unique Minecraft UUID of the user.</param>
+/// <param name="minecraftName">The minecraft name of the user.</param>
 /// <param name="username">The username of the user.</param>
 /// <param name="password">The password of the user.</param>
-public class User(ulong discordId, string minecraftUuid, string username, string password)
+public class User(ulong discordId, string minecraftName, string username, string password)
 {
     /// <summary>
     /// Gets or sets the Discord ID of the user.
@@ -23,7 +23,7 @@ public class User(ulong discordId, string minecraftUuid, string username, string
     /// <value>
     /// A <see cref="string"/> representing the user's unique Minecraft UUID.
     /// </value>
-    public string MinecraftUuid { get; set; } = minecraftUuid;
+    public string MinecraftName { get; set; } = minecraftName;
 
     /// <summary>
     /// Gets or sets the username of the user.
