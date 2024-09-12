@@ -153,7 +153,7 @@ public class Tests
     [Test]
     public void AuthenticateUserTests()
     {
-        if (!Core.RegisterAccount("duffie13", "password!", "password!", "testuuid", 100)) Assert.Fail();
+        if (!Core.RegisterAccount("duffie13", "password!", "testuuid", 100)) Assert.Fail();
         
         foreach (var keyValuePair in MockData.LoginCredentials)
         {
