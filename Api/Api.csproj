@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LogicLayer\LogicLayer.csproj" />
+      <ProjectReference Include="..\MockDataLayer\MockDataLayer.csproj" />
     </ItemGroup>
 
 </Project>

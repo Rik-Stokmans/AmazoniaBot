@@ -1,4 +1,9 @@
+using LogicLayer.Core;
+using MockDataLayer.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new LoginCredentialService());
 
 // Add services to the container.
 builder.Services.AddControllers();  // Add controllers service

@@ -16,13 +16,13 @@ public static partial class Core
         return await _userService.CreateUpdateUser(user) == DatabaseResult.Success;
     }
     
-    public static async Task<bool> RegisterAccount(string username, string password, string minecraftUuid, ulong discordId)
+    public static async Task<bool> RegisterAccount(string username, string password, string minecraftName, ulong discordId)
     {
         CheckInit();
         
         //TODO: transfer this to the authentication project
         
-        var user = new User(discordId, minecraftUuid, username, PasswordProtector.Protect(password));
+        var user = new User(discordId, minecraftName, username, PasswordProtector.Protect(password));
         
         //TODO make sure this code is unique
         var verificationCode = Verification.GenerateVerificationCode();

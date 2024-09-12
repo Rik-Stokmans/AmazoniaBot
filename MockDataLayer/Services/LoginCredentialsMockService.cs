@@ -11,6 +11,8 @@ public class LoginCredentialService : ILoginCredentialsService
         
         MockData.LoginCredentials.Add(code, new User(user.DiscordId, user.MinecraftName, user.Username, user.Password));
         
+        Console.WriteLine(code);
+        
         return Task.FromResult((DatabaseResult.Success, code));
     }
 
