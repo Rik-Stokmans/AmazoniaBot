@@ -16,8 +16,6 @@ public class Verification
 
     public static string GenerateBearerToken()
     {
-        
-        //TODO Implement bearer token generation
-        return "bearer";
+        return Guid.NewGuid().ToString();
     }
 }
