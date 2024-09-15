@@ -18,4 +18,9 @@ public abstract class Verification
     {
         return Guid.NewGuid().ToString();
     }
+    
+    public static string GenerateRefreshToken()
+    {
+        return Guid.NewGuid().ToString();
+    }
 }

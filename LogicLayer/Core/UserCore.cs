@@ -1,3 +1,4 @@
+using AuthenticationLayer;
 using LogicLayer.Cryptography;
 using LogicLayer.Interfaces.DataServices;
 using LogicLayer.Models.DataModels;
@@ -35,29 +36,34 @@ public static partial class Core
         return true;
     }
 
-    public static async Task<(bool, string)> VerifyAccount(string username, string password)
+    public static async Task<(bool, BearerToken?)> VerifyAccount(string username, string password)
     {
         var (databaseResult, user) = await _userService.GetUser(username);
         
-        if (databaseResult != DatabaseResult.Success) return (false, "");
+        if (databaseResult != DatabaseResult.Success) return (false, null);
 
-        if (!PasswordProtector.Verify(password, user.Password)) return (false, "");
+        if (!PasswordProtector.Verify(password, user.Password)) return (false, null);
 
-        var bearer = Verification.GenerateBearerToken();
-        _transientAuthenticationService.CreateBearerToken(user.DiscordId);
+        var bearer = _transientAuthenticationService.GenerateBearerToken(user.DiscordId);
             
         return (true, bearer);
     }
     
+    public static (bool, BearerToken?) RefreshToken(string refreshToken)
+    {
+        CheckInit();
+        
+        var bearer = _transientAuthenticationService.RefreshBearerToken(refreshToken);
+        
+        return bearer;
+    }
     
-    
-    public static async Task<(bool, string)> VerifyAccount(string code)
+    public static async Task<(bool, BearerToken?)> VerifyAccount(string code)
     {
         CheckInit();
         
         var (result, user, bearer) = _transientAuthenticationService.VerifyUser(code);
-        
-        return result != DatabaseResult.Success ? (false, "") : (await CreateAccount(user), bearer);
-    }
 
+        return result != DatabaseResult.Success ? (false, null) : (await CreateAccount(user), bearer);
+    }
 }

@@ -34,27 +34,76 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         UserCodes.Add((user, code));
     }
     
-    public (DatabaseResult, User, string) VerifyUser(string code)
+    public (DatabaseResult, User, BearerToken?) VerifyUser(string code)
     {
         var user = UserCodes.FirstOrDefault(x => x.Item2 == code).Item1;
 
         if (user == null)
         {
-            return (DatabaseResult.NotFound, new User(0, "", "", ""), "");
+            return (DatabaseResult.NotFound, new User(0, "", "", ""), null);
         }
         
         UserCodes.RemoveAll(x => x.Item2 == code);
+
+        var bearer = new BearerToken(user.DiscordId);
         
-        var bearer = Verification.GenerateBearerToken();
-        
-        BearerTokens.Add(new BearerToken(user.DiscordId, bearer));
+        BearerTokens.Add(bearer);
         
         return (DatabaseResult.Success, user, bearer);
     }
     
-    public void CreateBearerToken(ulong discordId)
+    public BearerToken GenerateBearerToken(ulong discordId)
     {
-        BearerTokens.Add(new BearerToken(discordId, Verification.GenerateBearerToken()));
+        BearerTokens.RemoveAll(x => x.DiscordId == discordId);
+        
+        var bearer = new BearerToken(discordId);
+        
+        BearerTokens.Add(bearer);
+        
+        Console.WriteLine(BearerTokens.Count);
+        
+        return bearer;
+    }
+    
+    public (bool, BearerToken?) RefreshBearerToken(string refreshToken)
+    {
+        var token = BearerTokens.FirstOrDefault(x => x.RefreshToken == refreshToken);
+        
+        if (token == null)
+        {
+            return (false, null);
+        }
+        
+        if (token.RefreshExpiryDate < DateTime.Now)
+        {
+            BearerTokens.RemoveAll(x => x.RefreshToken == refreshToken);
+            return (false, null);
+        }
+        
+        
+        BearerTokens.RemoveAll(x => x.RefreshToken == refreshToken);
+        
+        var newBearer = GenerateBearerToken(token.DiscordId);
+        
+        return (true, newBearer);
+    }
+    
+    public RequestPermissions GetRequestPermissions(string bearer)
+    {
+        var token = BearerTokens.FirstOrDefault(x => x.Bearer == bearer);
+        
+        if (token == null)
+        {
+            return new RequestPermissions(false, true, []);
+        }
+        
+        var now = DateTime.Now;
+        var valid = token.RefreshExpiryDate > now;
+        var expired = token.ExpiryDate < now;
+        
+        var allowedDiscordIds = new List<ulong> { token.DiscordId };
+        
+        return new RequestPermissions(valid, expired, allowedDiscordIds);
     }
 }
 

@@ -1,3 +1,4 @@
+using AuthenticationLayer;
 using LogicLayer.Models.DataModels;
 
 namespace LogicLayer.Interfaces.DataServices;
@@ -6,7 +7,9 @@ public interface ITransientAuthenticationService
 {
     public void StoreUserWithCode(User user);
     
-    public (DatabaseResult, User, string) VerifyUser(string code);
+    public (DatabaseResult, User, BearerToken?) VerifyUser(string code);
+
+    public (bool, BearerToken?) RefreshBearerToken(string refreshToken);
     
-    public void CreateBearerToken(ulong discordId);
+    public BearerToken GenerateBearerToken(ulong discordId);
 }
