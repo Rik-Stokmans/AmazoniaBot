@@ -6,7 +6,7 @@ public class Verification
     {
         var random = new Random();
         var code = "";
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < 4; i++)
         {
             code += random.Next(0, 9).ToString();
         }
