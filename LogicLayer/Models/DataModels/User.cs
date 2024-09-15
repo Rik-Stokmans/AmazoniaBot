@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents a user with a Discord ID, Minecraft UUID, username, and password.

@@ -1,5 +1,5 @@
-using LogicLayer.Interfaces;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
+using LogicLayer.Models.DataModels;
 
 namespace MockDataLayer.Services;
 
@@ -14,6 +14,15 @@ public class UserMockService : IUserService
             : (DatabaseResult.Success, user));
     }
 
+    public Task<(DatabaseResult, User)> GetUser(string username)
+    {
+        var user = MockData.Users.Find(user => user.Username == username);
+        
+        return Task.FromResult(user == null
+            ? (DatabaseResult.NotFound, new User(0, "", "", ""))
+            : (DatabaseResult.Success, user));
+    }
+
     public Task<(DatabaseResult, List<User>)> GetAllUsers()
     {
         return Task.FromResult((DatabaseResult.Success, MockData.Users));
@@ -21,7 +30,7 @@ public class UserMockService : IUserService
 
     public Task<DatabaseResult> CreateUpdateUser(User user)
     {
-        var existingUser = MockData.Users.Find(u => u.DiscordId == user.DiscordId);
+        var existingUser = MockData.Users.Find(u => u.DiscordId == user.DiscordId || u.Username == user.Username);
         if (existingUser != null)
         {
             existingUser.Username = user.Username;
@@ -44,5 +53,10 @@ public class UserMockService : IUserService
 
         MockData.Users.Remove(user);
         return Task.FromResult(DatabaseResult.Success);
+    }
+
+    public Task<bool> UserExists(ulong discordId)
+    {
+        return Task.FromResult(MockData.Users.Exists(u => u.DiscordId == discordId));
     }
 }

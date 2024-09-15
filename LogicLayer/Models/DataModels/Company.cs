@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents a company with a unique identifier, stock symbol, and total shares.

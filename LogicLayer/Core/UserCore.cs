@@ -1,15 +1,17 @@
+using AuthenticationLayer;
 using LogicLayer.Cryptography;
-using LogicLayer.Interfaces;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
+using LogicLayer.Models.DataModels;
 
 namespace LogicLayer.Core;
 
 public static partial class Core
 {
+    // ReSharper disable once NullableWarningSuppressionIsUsed
     private static IUserService _userService;
-    private static ILoginCredentialsService _loginCredentialsService;
+    private static ITransientAuthenticationService _transientAuthenticationService;
 
-    private static async  Task<bool> CreateAccount(User user)
+    private static async Task<bool> CreateAccount(User user)
     {
         CheckInit();
         
@@ -20,32 +22,48 @@ public static partial class Core
     {
         CheckInit();
         
-        //TODO: transfer this to the authentication project
-        
         var user = new User(discordId, minecraftName, username, PasswordProtector.Protect(password));
         
-        //TODO make sure this code is unique
-        var verificationCode = Verification.GenerateVerificationCode();
+        var userExists = await _userService.UserExists(discordId);
         
-        var (result, code) = await _loginCredentialsService.StoreUserWithCode(user);
+        if (userExists) return false;
+        
+        _transientAuthenticationService.StoreUserWithCode(user);
         
         //TODO Send verification code to user
         //TODO convert discord handle to discord id
         
-        return result == DatabaseResult.Success;
+        return true;
+    }
+
+    public static async Task<(bool, BearerToken?)> VerifyAccount(string username, string password)
+    {
+        var (databaseResult, user) = await _userService.GetUser(username);
+        
+        if (databaseResult != DatabaseResult.Success) return (false, null);
+
+        if (!PasswordProtector.Verify(password, user.Password)) return (false, null);
+
+        var bearer = _transientAuthenticationService.GenerateBearerToken(user.DiscordId);
+            
+        return (true, bearer);
     }
     
-    public static async Task<bool> VerifyAccount(string code)
+    public static (bool, BearerToken?) RefreshToken(string refreshToken)
     {
         CheckInit();
         
-        var (result, user) = await _loginCredentialsService.GetUserFromCode(code);
+        var bearer = _transientAuthenticationService.RefreshBearerToken(refreshToken);
         
-        if (result != DatabaseResult.Success) return false;
-        
-        await _loginCredentialsService.RemoveCode(code);
-        
-        return await CreateAccount(user);
+        return bearer;
     }
+    
+    public static async Task<(bool, BearerToken?)> VerifyAccount(string code)
+    {
+        CheckInit();
+        
+        var (result, user, bearer) = _transientAuthenticationService.VerifyUser(code);
 
+        return result != DatabaseResult.Success ? (false, null) : (await CreateAccount(user), bearer);
+    }
 }

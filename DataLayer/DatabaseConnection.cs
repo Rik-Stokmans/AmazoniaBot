@@ -1,12 +1,8 @@
-﻿using MySql.Data.MySqlClient;
-using Microsoft.Extensions.Configuration;
-
-namespace DataLayer;
+﻿namespace DataLayer;
 
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 /// <summary>

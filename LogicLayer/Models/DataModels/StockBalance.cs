@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents the stock balance for a user in a specific company.

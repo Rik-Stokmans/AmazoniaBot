@@ -1,5 +1,5 @@
-using LogicLayer.Interfaces;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
+using LogicLayer.Models.DataModels;
 
 namespace MockDataLayer.Services;
 

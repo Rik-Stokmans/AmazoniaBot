@@ -1,4 +1,4 @@
-﻿namespace LogicLayer.Models;
+﻿namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents a bank account with a balance and associated Discord ID.

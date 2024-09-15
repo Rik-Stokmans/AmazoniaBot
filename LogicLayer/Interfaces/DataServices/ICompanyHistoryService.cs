@@ -1,6 +1,6 @@
-using LogicLayer.Models;
+using LogicLayer.Models.DataModels;
 
-namespace LogicLayer.Interfaces;
+namespace LogicLayer.Interfaces.DataServices;
 
 public interface ICompanyHistoryService
 {
