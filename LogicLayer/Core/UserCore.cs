@@ -34,6 +34,22 @@ public static partial class Core
         
         return true;
     }
+
+    public static async Task<(bool, string)> VerifyAccount(string username, string password)
+    {
+        var (databaseResult, user) = await _userService.GetUser(username);
+        
+        if (databaseResult != DatabaseResult.Success) return (false, "");
+
+        if (!PasswordProtector.Verify(password, user.Password)) return (false, "");
+
+        var bearer = Verification.GenerateBearerToken();
+        _transientAuthenticationService.CreateBearerToken(user.DiscordId);
+            
+        return (true, bearer);
+    }
+    
+    
     
     public static async Task<(bool, string)> VerifyAccount(string code)
     {

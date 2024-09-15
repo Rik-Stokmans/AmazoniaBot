@@ -7,4 +7,6 @@ public interface ITransientAuthenticationService
     public void StoreUserWithCode(User user);
     
     public (DatabaseResult, User, string) VerifyUser(string code);
+    
+    public void CreateBearerToken(ulong discordId);
 }

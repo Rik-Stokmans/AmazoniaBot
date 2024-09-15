@@ -22,4 +22,12 @@ public class AuthenticationController : ControllerBase
         
         return result.Item1 ? Ok(result.Item2) : BadRequest("Code is invalid or expired.");
     }
+    
+    [HttpPost("Login/{username},{password}")]
+    public async Task<ActionResult<string>> Login(string username, string password)
+    {
+        var (result, bearer) = await Core.VerifyAccount(username, password);
+
+        return result ? Ok(bearer) : BadRequest("Invalid username or password.");
+    }
 }

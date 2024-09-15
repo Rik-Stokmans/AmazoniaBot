@@ -19,6 +19,13 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         var code = Verification.GenerateVerificationCode();
         
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        {
+            Console.WriteLine($"Verification code for {user.Username}: {code}");
+        }
+        
+        
+        
         if (UserCodes.Any(x => x.Item2 == code))
         {
             UserCodes.RemoveAll(x => x.Item2 == code);
@@ -40,7 +47,14 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         var bearer = Verification.GenerateBearerToken();
         
+        BearerTokens.Add(new BearerToken(user.DiscordId, bearer));
+        
         return (DatabaseResult.Success, user, bearer);
+    }
+    
+    public void CreateBearerToken(ulong discordId)
+    {
+        BearerTokens.Add(new BearerToken(discordId, Verification.GenerateBearerToken()));
     }
 }
 
