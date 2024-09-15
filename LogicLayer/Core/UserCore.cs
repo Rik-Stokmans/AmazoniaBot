@@ -1,16 +1,16 @@
 using LogicLayer.Cryptography;
-using LogicLayer.Interfaces;
-using LogicLayer.Interfaces.DataServices.Transient;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
+using LogicLayer.Models.DataModels;
 
 namespace LogicLayer.Core;
 
 public static partial class Core
 {
+    // ReSharper disable once NullableWarningSuppressionIsUsed
     private static IUserService _userService;
-    private static ILoginCredentialsService _loginCredentialsService;
+    private static ITransientAuthenticationService _transientAuthenticationService;
 
-    private static async  Task<bool> CreateAccount(User user)
+    private static async Task<bool> CreateAccount(User user)
     {
         CheckInit();
         
@@ -21,32 +21,27 @@ public static partial class Core
     {
         CheckInit();
         
-        //TODO: transfer this to the authentication project
-        
         var user = new User(discordId, minecraftName, username, PasswordProtector.Protect(password));
         
-        //TODO make sure this code is unique
-        var verificationCode = Verification.GenerateVerificationCode();
+        var userExists = await _userService.UserExists(discordId);
         
-        var (result, code) = await _loginCredentialsService.StoreUserWithCode(user);
+        if (userExists) return false;
+        
+        _transientAuthenticationService.StoreUserWithCode(user);
         
         //TODO Send verification code to user
         //TODO convert discord handle to discord id
         
-        return result == DatabaseResult.Success;
+        return true;
     }
     
-    public static async Task<bool> VerifyAccount(string code)
+    public static async Task<(bool, string)> VerifyAccount(string code)
     {
         CheckInit();
         
-        var (result, user) = await _loginCredentialsService.GetUserFromCode(code);
+        var (result, user, bearer) = _transientAuthenticationService.VerifyUser(code);
         
-        if (result != DatabaseResult.Success) return false;
-        
-        await _loginCredentialsService.RemoveCode(code);
-        
-        return await CreateAccount(user);
+        return result != DatabaseResult.Success ? (false, "") : (await CreateAccount(user), bearer);
     }
 
 }

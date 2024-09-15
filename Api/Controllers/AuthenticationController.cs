@@ -20,7 +20,6 @@ public class AuthenticationController : ControllerBase
     {
         var result = await Core.VerifyAccount(code);
         
-        //TODO make it return a bearer token
-        return result ? Ok("testok") : BadRequest("testbad");
+        return result.Item1 ? Ok(result.Item2) : BadRequest("Code is invalid or expired.");
     }
 }

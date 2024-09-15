@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents the financial history of a company, including profit and dividend information.

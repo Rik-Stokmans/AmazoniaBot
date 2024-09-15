@@ -1,5 +1,5 @@
-using LogicLayer.Interfaces;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
+using LogicLayer.Models.DataModels;
 
 namespace MockDataLayer.Services;
 
@@ -44,5 +44,10 @@ public class UserMockService : IUserService
 
         MockData.Users.Remove(user);
         return Task.FromResult(DatabaseResult.Success);
+    }
+
+    public Task<bool> UserExists(ulong discordId)
+    {
+        return Task.FromResult(MockData.Users.Exists(u => u.DiscordId == discordId));
     }
 }

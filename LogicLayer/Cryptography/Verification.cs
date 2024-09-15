@@ -13,4 +13,11 @@ public class Verification
 
         return code;
     }
+
+    public static string GenerateBearerToken()
+    {
+        
+        //TODO Implement bearer token generation
+        return "bearer";
+    }
 }

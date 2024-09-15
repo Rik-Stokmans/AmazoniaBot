@@ -1,6 +1,6 @@
-using LogicLayer.Models;
+using LogicLayer.Models.DataModels;
 
-namespace LogicLayer.Interfaces;
+namespace LogicLayer.Interfaces.DataServices;
 
 public interface IUserService
 {
@@ -42,5 +42,7 @@ public interface IUserService
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
     public Task<DatabaseResult> DeleteUser(ulong discordId);
+    
+    public Task<bool> UserExists(ulong discordId);
 
 }

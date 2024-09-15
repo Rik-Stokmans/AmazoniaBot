@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Models.DataModels;
 
 /// <summary>
 /// Represents the possible results of a database operation.

@@ -1,5 +1,6 @@
+using AuthenticationLayer;
 using LogicLayer.Core;
-using LogicLayer.Models;
+using LogicLayer.Models.DataModels;
 using MockDataLayer;
 using MockDataLayer.Services;
 
@@ -68,7 +69,7 @@ public class Tests
             new StockBalance(5, 2, 1)
         ];
         
-        Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new LoginCredentialService());
+        Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new TransientAuthenticationService());
     }
 
     /*

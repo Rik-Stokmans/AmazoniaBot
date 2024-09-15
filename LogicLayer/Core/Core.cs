@@ -1,6 +1,4 @@
-using LogicLayer.Interfaces;
-using LogicLayer.Interfaces.DataServices.Transient;
-using LogicLayer.Models;
+using LogicLayer.Interfaces.DataServices;
 
 namespace LogicLayer.Core;
 
@@ -18,11 +16,11 @@ public static partial class Core
     /// <remarks>
     /// This method sets the internal state to indicate that initialization is complete.
     /// </remarks>
-    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ILoginCredentialsService loginCredentialsService)
+    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ITransientAuthenticationService transientAuthenticationService)
     {
         _bankAccountService = bankAccountService;
         _userService = userService;
-        _loginCredentialsService = loginCredentialsService;
+        _transientAuthenticationService = transientAuthenticationService;
         _initialized = true;
     }
     
