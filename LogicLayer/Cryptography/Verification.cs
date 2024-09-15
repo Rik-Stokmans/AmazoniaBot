@@ -1,6 +1,6 @@
 namespace LogicLayer.Cryptography;
 
-public class Verification
+public abstract class Verification
 {
     public static string GenerateVerificationCode()
     {
