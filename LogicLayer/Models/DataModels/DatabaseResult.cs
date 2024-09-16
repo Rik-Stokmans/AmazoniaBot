@@ -23,5 +23,10 @@ public enum DatabaseResult
     /// <summary>
     /// indicates that the database operation failed because the entry was not found.
     /// </summary>
-    NotFound
+    NotFound,
+    
+    /// <summary>
+    /// indicates that the database operation failed because of authorization issues.
+    /// </summary>
+    Unauthorized
 }

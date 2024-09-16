@@ -7,6 +7,10 @@ namespace LogicLayer.Core;
 /// </summary>
 public static partial class Core
 {
+    //global settings
+    private static int _maxBankAccounts = 10;
+    
+    
     // ReSharper disable once NullableWarningSuppressionIsUsed
     private static bool _initialized;
 

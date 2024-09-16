@@ -94,16 +94,16 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         if (token == null)
         {
-            return new RequestPermissions(false, true, []);
+            return new RequestPermissions();
         }
         
         var now = DateTime.Now;
         var valid = token.RefreshExpiryDate > now;
         var expired = token.ExpiryDate < now;
+
+        var discordId = token.DiscordId;
         
-        var allowedDiscordIds = new List<ulong> { token.DiscordId };
-        
-        return new RequestPermissions(valid, expired, allowedDiscordIds);
+        return new RequestPermissions(valid, expired, discordId);
     }
 }
 

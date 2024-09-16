@@ -12,8 +12,6 @@ public class AuthenticationController : ControllerBase
     [HttpPost("RegisterAccount/{username},{password},{minecraftName},{discordId}")]
     public async Task<ActionResult> RegisterAccount(string username, string password, string minecraftName, ulong discordId)
     {
-        
-        
         var result = await Core.RegisterAccount(username, password, minecraftName, discordId);
         
         return result ? Ok() : BadRequest();

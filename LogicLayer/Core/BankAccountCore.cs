@@ -12,22 +12,35 @@ public static partial class Core
     /// Registers a new bank account for the user with the given Discord ID if one does not already exist.
     /// </summary>
     /// <param name="discordId">The unique Discord ID of the user.</param>
+    /// <param name="accountName"></param>
     /// <returns>
     /// A <see cref="bool"/> indicating whether the bank account was successfully registered. 
     /// Returns <c>false</c> if the account already exists.
     /// </returns>
-    public static async Task<bool> RegisterBankAccount(ulong discordId)
+    public static async Task<bool> RegisterBankAccount(ulong discordId, string accountName)
     {
         CheckInit();
 
-        var (result, bankAccount) = await _bankAccountService.GetBankAccount(discordId);
-        if (result == DatabaseResult.Success) return false;
-        
-        await _bankAccountService.CreateUpdateBankAccount(new BankAccount(discordId, 0));
-        
-        return true;
-    }
+        var allBankAccounts = await GetAllBankAccounts();
 
+        var usersBankAccounts = allBankAccounts.Where(x => x.DiscordId == discordId).ToList();
+        
+        var bankAccountCount = usersBankAccounts.Count;
+        
+        if (bankAccountCount >= _maxBankAccounts) return false;
+        
+        if (usersBankAccounts.Any(ba => ba.AccountName == accountName)) return false;
+        
+        allBankAccounts = allBankAccounts.OrderByDescending(x => x.AccountNumber).ToList();
+        
+        var accountNumber = allBankAccounts.Count == 0 ? 1 : allBankAccounts[0].AccountNumber + 1;
+        
+        var result = await _bankAccountService.CreateBankAccount(new BankAccount(discordId, accountName, accountNumber, 0));
+        
+        return result == DatabaseResult.Success;
+    }
+    
+    /*
     /// <summary>
     /// Changes the balance of the bank account associated with the given Discord ID.
     /// </summary>
@@ -37,6 +50,7 @@ public static partial class Core
     /// A <see cref="bool"/> indicating whether the balance was successfully updated. 
     /// Returns <c>false</c> if the account does not exist.
     /// </returns>
+  
     public static async Task<bool> ChangeBalance(ulong discordId, double value)
     {
         CheckInit();
@@ -48,44 +62,43 @@ public static partial class Core
         await _bankAccountService.CreateUpdateBankAccount(bankAccount);
         return true;
     }
-
     
-    //TODO: replace this with the transfer method in IBankAccountService
-    public static async Task<bool> TransferBalance(ulong sender, ulong receiver, double value)
+
+    */
+    public static async Task<bool> TransferBalance(ulong sender, int accountNumber, int targetAccountNumber, long amount)
     {
-        if (sender == receiver || value <= 0) return false;
+        CheckInit();
         
-        var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts();
-        if (result != DatabaseResult.Success) return false;
-
-        var senderAccount = bankAccounts.Find(ba => ba.DiscordId == sender);
-        var receiverAccount = bankAccounts.Find(ba => ba.DiscordId == receiver);
-
-        if (senderAccount == null || receiverAccount == null) return false;
+        if (amount <= 0) return false;
         
-        if (senderAccount.Balance < value) return false;
-
-        senderAccount.Balance -= value;
-        receiverAccount.Balance += value;
-
-        await _bankAccountService.CreateUpdateBankAccount(senderAccount);
-        await _bankAccountService.CreateUpdateBankAccount(receiverAccount);
-        return true;
+        var result = await _bankAccountService.TransferFunds(sender, accountNumber, targetAccountNumber, amount);
+        
+        return result == DatabaseResult.Success;
     }
     
+    public static async Task<bool> TransferAllBalance(ulong sender, int accountNumber, int targetAccountNumber)
+    {
+        CheckInit();
+        
+        var result = await _bankAccountService.TransferAllFunds(sender, accountNumber, targetAccountNumber);
+        
+        return result == DatabaseResult.Success;
+    }
+
 
     /// <summary>
     /// Deletes the bank account associated with the given Discord ID.
     /// </summary>
     /// <param name="discordId">The unique Discord ID of the user.</param>
+    /// <param name="accountNumber"></param>
     /// <returns>
     /// A <see cref="bool"/> indicating whether the account was successfully deleted.
     /// </returns>
-    public static async Task<bool> DeleteBankAccount(ulong discordId)
+    public static async Task<bool> DeleteBankAccount(ulong discordId, int accountNumber)
     {
         CheckInit();
 
-        var result = await _bankAccountService.DeleteBankAccount(discordId);
+        var result = await _bankAccountService.DeleteBankAccount(discordId, accountNumber);
         return result == DatabaseResult.Success;
     }
 
@@ -101,5 +114,21 @@ public static partial class Core
 
         var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts();
         return result == DatabaseResult.Success ? bankAccounts : [];
+    }
+
+    public static async Task<List<BankAccount>> GetAllBankAccounts(ulong discordId)
+    {
+        CheckInit();
+
+        var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts(discordId);
+        return result == DatabaseResult.Success ? bankAccounts : [];
+    }
+    
+    public static async Task<int> GetUserBankAccountCount(ulong discordId)
+    {
+        CheckInit();
+
+        var (result, count) = await _bankAccountService.GetAllBankAccounts(discordId);
+        return result == DatabaseResult.Success ? count.Count : 0;
     }
 }
