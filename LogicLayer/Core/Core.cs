@@ -25,6 +25,7 @@ public static partial class Core
         _bankAccountService = bankAccountService;
         _userService = userService;
         _transientAuthenticationService = transientAuthenticationService;
+        _stockBalanceService = stockBalanceService;
         _companyService = companyService;
         _initialized = true;
     }
