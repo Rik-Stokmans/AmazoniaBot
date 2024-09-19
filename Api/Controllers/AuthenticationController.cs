@@ -17,7 +17,7 @@ public class AuthenticationController : ControllerBase
         return result ? Ok() : BadRequest();
     }
     
-    [HttpGet("Verify/{code}")]
+    [HttpPost("Verify/{code}")]
     public async Task<ActionResult<BearerToken>> VerifyAccount(string code)
     {
         var (result, bearerToken) = await Core.VerifyAccount(code);

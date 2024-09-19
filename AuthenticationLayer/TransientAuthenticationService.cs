@@ -24,8 +24,6 @@ public class TransientAuthenticationService : ITransientAuthenticationService
             Console.WriteLine($"Verification code for {user.Username}: {code}");
         }
         
-        
-        
         if (UserCodes.Any(x => x.Item2 == code))
         {
             UserCodes.RemoveAll(x => x.Item2 == code);

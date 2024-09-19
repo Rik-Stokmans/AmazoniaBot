@@ -45,6 +45,18 @@ public class BankController : ControllerBase
         return result ? Ok("Funds transferred!") : BadRequest("Account already empty or invalid account numbers.");
     }
     
+    [HttpPost("Delete/{accountNumber}")]
+    public async Task<ActionResult> DeleteBankAccount(int accountNumber)
+    {
+        var (verified, user) = RequestVerifier.VerifyRequest(this);
+        
+        if (!verified) return BadRequest("Bearer token is invalid.");
+
+        var result = await Core.DeleteBankAccount(user, accountNumber);
+
+        return result ? Ok("Account deleted!") : BadRequest("Account not found.");
+    }
+    
     [HttpGet("GetAll")]
     public async Task<ActionResult<List<BankAccount>>> GetAllBankAccounts()
     {

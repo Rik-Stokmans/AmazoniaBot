@@ -20,6 +20,8 @@ public static partial class Core
     public static async Task<bool> RegisterBankAccount(ulong discordId, string accountName)
     {
         CheckInit();
+        
+        //todo refactor this
 
         var allBankAccounts = await GetAllBankAccounts();
 
@@ -123,12 +125,12 @@ public static partial class Core
         var (result, bankAccounts) = await _bankAccountService.GetAllBankAccounts(discordId);
         return result == DatabaseResult.Success ? bankAccounts : [];
     }
-    
-    public static async Task<int> GetUserBankAccountCount(ulong discordId)
+
+    public static async Task<bool> Pay(int accountNumber, long amount)
     {
         CheckInit();
 
-        var (result, count) = await _bankAccountService.GetAllBankAccounts(discordId);
-        return result == DatabaseResult.Success ? count.Count : 0;
+        var result = await _bankAccountService.Pay(accountNumber, amount);
+        return result == DatabaseResult.Success;
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class RequestVerifier
+public abstract class RequestVerifier
 {
     public static (bool, ulong) VerifyRequest(ControllerBase controller)
     {

@@ -26,9 +26,9 @@ MockData.BankAccounts =
 
 MockData.Companies =
 [
-    new Company(1, "AMZN", 5000),
-    new Company(2, "CRIM", 1000),
-    new Company(3, "KMRT", 500)
+    new Company(1, 1, "AMZN", 5000),
+    new Company(2, 1, "CRIM", 1000),
+    new Company(3, 2, "KMRT", 500)
 ];
 
 MockData.CompanyHistories =

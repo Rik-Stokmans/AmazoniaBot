@@ -19,6 +19,32 @@ public class BankAccountMockService : IBankAccountService
         return Task.FromResult((DatabaseResult.Success, MockData.BankAccounts));
     }
 
+    public Task<(DatabaseResult, BankAccount)> GetBankAccount(long accountNumber)
+    {
+        var bankAccount = MockData.BankAccounts.Find(ba => ba.AccountNumber == accountNumber);
+        
+        return Task.FromResult(bankAccount == null
+            ? (DatabaseResult.NotFound, new BankAccount(0, "", 0, 0))
+            : (DatabaseResult.Success, bankAccount));
+    }
+    
+    public Task<DatabaseResult> Pay(int accountNumber, long amount)
+    {
+        var bankAccount = MockData.BankAccounts.Find(ba => ba.AccountNumber == accountNumber);
+        if (bankAccount == null)
+        {
+            return Task.FromResult(DatabaseResult.NotFound);
+        }
+
+        if (bankAccount.Balance < amount)
+        {
+            return Task.FromResult(DatabaseResult.Fail);
+        }
+
+        bankAccount.Balance -= amount;
+        return Task.FromResult(DatabaseResult.Success);
+    }
+
     public Task<DatabaseResult> CreateBankAccount(BankAccount bankAccount)
     {
         MockData.BankAccounts.Add(bankAccount);
