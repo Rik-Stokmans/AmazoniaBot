@@ -32,10 +32,14 @@ public class StockExchangeController : ControllerBase
         return !result ? NotFound() : Ok(stockBalances);
     }
     
-    [HttpPost("RegisterStockOrder/{userId},{companyId},{shareAmount},{buyType},{price},{bankAccountId}")]
-    public async Task<ActionResult> RegisterStockOrder(ulong userId, int companyId, int shareAmount, bool buyType, long price, int bankAccountId)
+    [HttpPost("RegisterStockOrder/{companyId},{shareAmount},{buyType},{price},{bankAccountId}")]
+    public async Task<ActionResult> RegisterStockOrder(int companyId, int shareAmount, bool buyType, long price, int bankAccountId)
     {
-        var order = new StockOrder(userId, companyId, shareAmount, buyType, price, bankAccountId);
+        var (verified, user) = RequestVerifier.VerifyRequest(this);
+        
+        if (!verified) return BadRequest("Bearer token is invalid.");
+        
+        var order = new StockOrder(user, companyId, shareAmount, buyType, price, bankAccountId);
         
         var success = await Core.RegisterStockOrder(order);
 
