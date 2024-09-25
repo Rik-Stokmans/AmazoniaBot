@@ -14,6 +14,13 @@ public partial class Core
         return await _stockBalanceService.ChangeStockBalance(discordId, companyId, shareAmount) == DatabaseResult.Success;
     }
     
+    public static async Task<bool> TransferStockBalance(ulong fromDiscordId, ulong toDiscordId, int companyId, int shareAmount)
+    {
+        CheckInit();
+        
+        return await _stockBalanceService.TransferStockBalance(fromDiscordId, toDiscordId, companyId, shareAmount) == DatabaseResult.Success;
+    }
+    
     public static async Task<(bool, StockBalance)> GetStockBalance(ulong discordId, int companyId)
     {
         CheckInit();

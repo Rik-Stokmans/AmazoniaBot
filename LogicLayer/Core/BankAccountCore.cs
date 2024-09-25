@@ -41,32 +41,32 @@ public static partial class Core
         
         return result == DatabaseResult.Success;
     }
-    
-    /*
+
     /// <summary>
     /// Changes the balance of the bank account associated with the given Discord ID.
     /// </summary>
-    /// <param name="discordId">The unique Discord ID of the user.</param>
+    /// <param name="bankAccountId"></param>
     /// <param name="value">The amount to change the balance by. Can be positive or negative.</param>
     /// <returns>
     /// A <see cref="bool"/> indicating whether the balance was successfully updated. 
     /// Returns <c>false</c> if the account does not exist.
     /// </returns>
-  
-    public static async Task<bool> ChangeBalance(ulong discordId, double value)
+    public static async Task<bool> ChangeBalance(int bankAccountId, long value)
     {
         CheckInit();
 
-        var (result, bankAccount) = await _bankAccountService.GetBankAccount(discordId);
-        if (result != DatabaseResult.Success) return false;
-
-        bankAccount.Balance += value;
-        await _bankAccountService.CreateUpdateBankAccount(bankAccount);
-        return true;
+        var result = await _bankAccountService.AddFunds(bankAccountId, value);
+        return result == DatabaseResult.Success;
     }
     
+    public static async Task<long> GetBalance(int accountNumber)
+    {
+        CheckInit();
 
-    */
+        var (result, bankAccount) = await _bankAccountService.GetBankAccount(accountNumber);
+        return result == DatabaseResult.Success ? bankAccount.Balance : 0;
+    }
+    
     public static async Task<bool> TransferBalance(ulong sender, int accountNumber, int targetAccountNumber, long amount)
     {
         CheckInit();

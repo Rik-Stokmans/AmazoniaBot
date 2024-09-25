@@ -19,9 +19,9 @@ public class BankAccountMockService : IBankAccountService
         return Task.FromResult((DatabaseResult.Success, MockData.BankAccounts));
     }
 
-    public Task<(DatabaseResult, BankAccount)> GetBankAccount(long accountNumber)
+    public Task<(DatabaseResult, BankAccount)> GetBankAccount(int accountNumber)
     {
-        var bankAccount = MockData.BankAccounts.Find(ba => ba.AccountNumber == accountNumber);
+        var bankAccount = MockData.BankAccounts.FirstOrDefault(ba => ba.AccountNumber == accountNumber);
         
         return Task.FromResult(bankAccount == null
             ? (DatabaseResult.NotFound, new BankAccount(0, "", 0, 0))

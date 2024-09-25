@@ -16,7 +16,7 @@ public interface IBankAccountService
 
     public Task<(DatabaseResult, List<BankAccount>)> GetAllBankAccounts(ulong discordId);
     
-    public Task<(DatabaseResult, BankAccount)> GetBankAccount(long accountNumber);
+    public Task<(DatabaseResult, BankAccount)> GetBankAccount(int accountNumber);
         
     public Task<DatabaseResult> Pay(int accountNumber, long amount);
     

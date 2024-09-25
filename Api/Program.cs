@@ -7,7 +7,7 @@ using MockDataLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new TransientAuthenticationService());
+Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new TransientAuthenticationService(), new StockOrderMockService());
 
 MockData.Users =
 [
@@ -17,11 +17,11 @@ MockData.Users =
 
 MockData.BankAccounts =
 [
-    new BankAccount(1, "test1", 1, 100),
-    new BankAccount(1, "test2", 2, 200),
-    new BankAccount(1, "test3", 3, 300),
-    new BankAccount(1, "test4", 4, 400),
-    new BankAccount(2, "test5", 5, 500)
+    new BankAccount(1, "test1", 1, 10000 * 100),
+    new BankAccount(1, "test2", 2, 5000 * 100),
+    new BankAccount(1, "test3", 3, 3000 * 100),
+    new BankAccount(1, "test4", 4, 1000 * 100),
+    new BankAccount(2, "test5", 5, 1000 * 100)
 ];
 
 MockData.Companies =
@@ -54,14 +54,15 @@ MockData.StockBalances =
 [
     new StockBalance(1, 1, 20),
     new StockBalance(2, 1, 17),
-    new StockBalance(3, 1, 13),
-    new StockBalance(4, 1, 6),
-    new StockBalance(5, 1, 1),
+    
     new StockBalance(1, 2, 8),
     new StockBalance(2, 2, 6),
-    new StockBalance(3, 2, 4),
-    new StockBalance(4, 2, 3),
-    new StockBalance(5, 2, 1)
+];
+
+MockData.StockOrders =
+[
+    new StockOrder(2, 1, 16, false, 100, 5),
+    new StockOrder(2, 1, 1, false, 90, 5)
 ];
 
 // Add services to the container.

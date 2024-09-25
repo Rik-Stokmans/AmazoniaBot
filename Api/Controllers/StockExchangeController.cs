@@ -1,5 +1,6 @@
 using LogicLayer.Core;
 using LogicLayer.Models.DataModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -29,6 +30,16 @@ public class StockExchangeController : ControllerBase
         var (result, stockBalances) = await Core.GetStockBalances(companyId);
 
         return !result ? NotFound() : Ok(stockBalances);
+    }
+    
+    [HttpPost("RegisterStockOrder/{userId},{companyId},{shareAmount},{buyType},{price},{bankAccountId}")]
+    public async Task<ActionResult> RegisterStockOrder(ulong userId, int companyId, int shareAmount, bool buyType, long price, int bankAccountId)
+    {
+        var order = new StockOrder(userId, companyId, shareAmount, buyType, price, bankAccountId);
+        
+        var success = await Core.RegisterStockOrder(order);
+
+        return success ? Ok() : BadRequest();
     }
     
 }

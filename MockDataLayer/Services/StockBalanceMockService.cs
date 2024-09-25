@@ -45,4 +45,19 @@ public class StockBalanceMockService : IStockBalanceService
         
         return Task.FromResult((DatabaseResult.Success, stockBalances));
     }
+
+    public Task<DatabaseResult> TransferStockBalance(ulong fromDiscordId, ulong toDiscordId, int companyId, int shareAmount)
+    {
+        var fromStockBalance = MockData.StockBalances.Find(x => x.DiscordId == fromDiscordId && x.CompanyId == companyId);
+        var toStockBalance = MockData.StockBalances.Find(x => x.DiscordId == toDiscordId && x.CompanyId == companyId);
+        
+        if (fromStockBalance == null || toStockBalance == null) return Task.FromResult(DatabaseResult.Fail);
+        
+        if (fromStockBalance.ShareAmount - shareAmount < 0) return Task.FromResult(DatabaseResult.Fail);
+        
+        fromStockBalance.ShareAmount -= shareAmount;
+        toStockBalance.ShareAmount += shareAmount;
+        
+        return Task.FromResult(DatabaseResult.Success);
+    }
 }

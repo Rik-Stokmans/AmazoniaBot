@@ -58,8 +58,6 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         BearerTokens.Add(bearer);
         
-        Console.WriteLine(BearerTokens.Count);
-        
         return bearer;
     }
     

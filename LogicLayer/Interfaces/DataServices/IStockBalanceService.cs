@@ -11,4 +11,5 @@ public interface IStockBalanceService
     public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(ulong discordId);
     
     public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(int companyId);
+    public Task<DatabaseResult> TransferStockBalance(ulong fromDiscordId, ulong toDiscordId, int companyId, int shareAmount);
 }
