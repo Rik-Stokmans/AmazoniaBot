@@ -48,14 +48,6 @@ public class StockOrderMockService : IStockOrderService
             MockData.StockOrders.Add(new StockOrder(order.userId, order.companyId, shareAmountToFulFill, order.buyType, order.price, order.bankAccountId));
         }
         
-        //await Task.Delay(1000);
-        
-        //TODO TEMP
-        Console.WriteLine("StockOrders:");
-        MockData.StockOrders.ForEach(stockOrder => Console.WriteLine("User: " + stockOrder.userId + " Company: " + stockOrder.companyId + " ShareAmount: " + stockOrder.shareAmount + " BuyType: " + stockOrder.buyType + " Price: " + stockOrder.price + " BankAccountId: " + stockOrder.bankAccountId));
-        Console.WriteLine("End");
-        //end
-        
         return await Task.FromResult(DatabaseResult.Success);
         
         //TODO Polish this
