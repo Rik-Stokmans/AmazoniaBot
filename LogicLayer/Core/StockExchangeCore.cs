@@ -50,6 +50,13 @@ public partial class Core
             }
         }
     }
+    
+    public static async Task<(bool, List<StockOrder>)> GetStockOrders(ulong userId)
+    {
+        CheckInit();
+        
+        return await _stockOrderService.GetStockOrders(userId);
+    }
 }
 
 

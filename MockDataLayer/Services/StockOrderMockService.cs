@@ -42,12 +42,13 @@ public class StockOrderMockService : IStockOrderService
         else stockOrders.ForEach(SellAction);
         
         loopOrdersToRemove.ForEach(orderToRemove => MockData.StockOrders.Remove(orderToRemove));
+
+        if (shareAmountToFulFill <= 0) return await Task.FromResult(DatabaseResult.Success);
         
-        if (shareAmountToFulFill > 0)
-        {
-            MockData.StockOrders.Add(new StockOrder(order.userId, order.companyId, shareAmountToFulFill, order.buyType, order.price, order.bankAccountId));
-        }
-        
+        var uniqueId = MockData.StockOrders.OrderByDescending(x => x.OrderId).FirstOrDefault()?.OrderId + 1 ?? 0;
+            
+        MockData.StockOrders.Add(new StockOrder(order.userId, order.companyId, shareAmountToFulFill, order.buyType, order.price, order.bankAccountId, uniqueId));
+
         return await Task.FromResult(DatabaseResult.Success);
         
         //TODO Polish this
@@ -72,20 +73,26 @@ public class StockOrderMockService : IStockOrderService
                 var stockTransferred = await Core.TransferStockBalance(loopOrder.userId, order.userId, loopOrder.companyId, shareAmountThatCanFullFill);
                 var orderPayed = await Core.TransferBalance(order.userId, order.bankAccountId, loopOrder.bankAccountId, shareAmountThatCanFullFill * loopOrder.price);
 
-                if (!orderPayed && !stockTransferred)
+                if (!orderPayed || !stockTransferred)
                 {
                     Console.WriteLine("Failed to pay or transfer stock");
                     return;
                 }
                 
                 shareAmountToFulFill -= shareAmountThatCanFullFill;
-                loopOrder.shareAmount -= shareAmountThatCanFullFill;
+                shareAmountThatCanFullFill = 0;
             }
             else
             {
+                var stockTransferred = await Core.TransferStockBalance(loopOrder.userId, order.userId, loopOrder.companyId, loopOrder.shareAmount);
                 var orderPayed = await Core.TransferBalance(order.userId, order.bankAccountId, loopOrder.bankAccountId, loopOrder.shareAmount * loopOrder.price);
                 
-                if (!orderPayed) return;
+                
+                if (!orderPayed || !stockTransferred)
+                {
+                    Console.WriteLine("Failed to pay or transfer stock");
+                    return;
+                }
                 
                 shareAmountThatCanFullFill -= loopOrder.shareAmount;
                 shareAmountToFulFill -= loopOrder.shareAmount;
@@ -98,5 +105,12 @@ public class StockOrderMockService : IStockOrderService
         {
             throw new NotImplementedException();
         }
+    }
+
+    public Task<(bool, List<StockOrder>)> GetStockOrders(ulong userId)
+    {
+        var stockOrders = MockData.StockOrders.Where(stockOrder => stockOrder.userId == userId).ToList();
+        
+        return Task.FromResult((true, stockOrders));
     }
 }
