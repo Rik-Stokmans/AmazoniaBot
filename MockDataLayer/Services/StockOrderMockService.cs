@@ -101,6 +101,7 @@ public class StockOrderMockService : IStockOrderService
             }
         }
         
+        //TODO Make this
         async void SellAction(StockOrder loopOrder)
         {
             throw new NotImplementedException();
@@ -112,5 +113,12 @@ public class StockOrderMockService : IStockOrderService
         var stockOrders = MockData.StockOrders.Where(stockOrder => stockOrder.userId == userId).ToList();
         
         return Task.FromResult((true, stockOrders));
+    }
+
+    public Task<bool> CancelStockOrder(ulong userId, int orderId)
+    {
+        MockData.StockOrders.RemoveAll(o => o.userId == userId && o.OrderId == orderId);
+        
+        return Task.FromResult(true);
     }
 }

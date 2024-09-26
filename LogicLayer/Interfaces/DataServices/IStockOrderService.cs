@@ -11,4 +11,6 @@ public interface IStockOrderService
     public Task<DatabaseResult> TryFulfillStockOrder(StockOrder order);
     
     public Task<(bool, List<StockOrder>)> GetStockOrders(ulong userId);
+    
+    public Task<bool> CancelStockOrder(ulong userId, int orderId);
 }

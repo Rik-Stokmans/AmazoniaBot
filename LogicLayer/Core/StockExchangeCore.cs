@@ -57,6 +57,13 @@ public partial class Core
         
         return await _stockOrderService.GetStockOrders(userId);
     }
+    
+    public static async Task<bool> CancelStockOrder(ulong userId, int orderId)
+    {
+        CheckInit();
+        
+        return await _stockOrderService.CancelStockOrder(userId, orderId);
+    }
 }
 
 

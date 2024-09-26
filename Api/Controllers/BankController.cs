@@ -9,6 +9,18 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class BankController : ControllerBase
 {
+    [HttpGet("GetAll")]
+    public async Task<ActionResult<List<BankAccount>>> GetAllBankAccounts()
+    {
+        var (verified, user) = RequestVerifier.VerifyRequest(this);
+        
+        if (!verified) return BadRequest("Bearer token is invalid.");
+
+        var result = await Core.GetAllBankAccounts(user);
+
+        return Ok(result);
+    }
+    
     [HttpPost("Register/{name}")]
     public async Task<ActionResult> RegisterBankAccount(string name)
     {
@@ -45,7 +57,7 @@ public class BankController : ControllerBase
         return result ? Ok("Funds transferred!") : BadRequest("Account already empty or invalid account numbers.");
     }
     
-    [HttpPost("Delete/{accountNumber}")]
+    [HttpDelete("Delete/{accountNumber}")]
     public async Task<ActionResult> DeleteBankAccount(int accountNumber)
     {
         var (verified, user) = RequestVerifier.VerifyRequest(this);
@@ -55,17 +67,5 @@ public class BankController : ControllerBase
         var result = await Core.DeleteBankAccount(user, accountNumber);
 
         return result ? Ok("Account deleted!") : BadRequest("Account not found.");
-    }
-    
-    [HttpGet("GetAll")]
-    public async Task<ActionResult<List<BankAccount>>> GetAllBankAccounts()
-    {
-        var (verified, user) = RequestVerifier.VerifyRequest(this);
-        
-        if (!verified) return BadRequest("Bearer token is invalid.");
-
-        var result = await Core.GetAllBankAccounts(user);
-
-        return Ok(result);
     }
 }

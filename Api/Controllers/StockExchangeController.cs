@@ -8,6 +8,18 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class StockExchangeController : ControllerBase
 {
+    [HttpGet("GetStockOrders")]
+    public async Task<ActionResult<List<StockOrder>>> GetStockOrders()
+    {
+        var (verified, user) = RequestVerifier.VerifyRequest(this);
+        
+        if (!verified) return BadRequest("Bearer token is invalid.");
+
+        var (success, stockOrders) = await Core.GetStockOrders(user);
+
+        return success ? Ok(stockOrders) : NotFound();
+    }
+    
     [HttpGet("GetBalance/{discordId},{companyId}")]
     public async Task<ActionResult<StockBalance>> GetStockBalance(ulong discordId, int companyId)
     {
@@ -46,18 +58,16 @@ public class StockExchangeController : ControllerBase
         return success ? Ok() : BadRequest();
     }
     
-    [HttpGet("GetStockOrders")]
-    public async Task<ActionResult<List<StockOrder>>> GetStockOrders()
+    [HttpDelete("CancelStockOrder/{stockOrderId}")]
+    public async Task<ActionResult> DeleteStockOrder(int stockOrderId)
     {
         var (verified, user) = RequestVerifier.VerifyRequest(this);
         
         if (!verified) return BadRequest("Bearer token is invalid.");
 
-        var (success, stockOrders) = await Core.GetStockOrders(user);
+        var success = await Core.CancelStockOrder(user, stockOrderId);
 
-        return success ? Ok(stockOrders) : NotFound();
+        return success ? Ok() : NotFound();
     }
-    
-    
     
 }
