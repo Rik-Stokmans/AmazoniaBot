@@ -12,4 +12,6 @@ public interface ITransientAuthenticationService
     public (bool, BearerToken?) RefreshBearerToken(string refreshToken);
     
     public BearerToken GenerateBearerToken(ulong discordId);
+
+    public RequestPermissions GetRequestPermissions(string bearer);
 }

@@ -7,6 +7,10 @@ namespace LogicLayer.Core;
 /// </summary>
 public static partial class Core
 {
+    //global settings
+    private static int _maxBankAccounts = 10;
+    
+    
     // ReSharper disable once NullableWarningSuppressionIsUsed
     private static bool _initialized;
 
@@ -16,11 +20,15 @@ public static partial class Core
     /// <remarks>
     /// This method sets the internal state to indicate that initialization is complete.
     /// </remarks>
-    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ITransientAuthenticationService transientAuthenticationService)
+    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ITransientAuthenticationService transientAuthenticationService, IStockOrderService stockOrderService, IShopItemService shopItemService)
     {
         _bankAccountService = bankAccountService;
         _userService = userService;
         _transientAuthenticationService = transientAuthenticationService;
+        _stockBalanceService = stockBalanceService;
+        _stockOrderService = stockOrderService;
+        _companyService = companyService;
+        _shopItemService = shopItemService;
         _initialized = true;
     }
     

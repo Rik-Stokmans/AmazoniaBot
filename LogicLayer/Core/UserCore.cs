@@ -63,7 +63,14 @@ public static partial class Core
         CheckInit();
         
         var (result, user, bearer) = _transientAuthenticationService.VerifyUser(code);
-
+        
         return result != DatabaseResult.Success ? (false, null) : (await CreateAccount(user), bearer);
+    }
+    
+    public static RequestPermissions GetRequestPermissions(string bearer)
+    {
+        CheckInit();
+        
+        return _transientAuthenticationService.GetRequestPermissions(bearer);
     }
 }

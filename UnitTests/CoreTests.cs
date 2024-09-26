@@ -8,6 +8,8 @@ namespace UnitTests;
 
 public class Tests
 {
+    
+    /*
     [SetUp]
     public void Setup()
     {
@@ -17,25 +19,26 @@ public class Tests
             new User(2, "TestUser2", "TestMinecraftUuid2", "TestPassword2"),
             new User(3, "TestUser3", "TestMinecraftUuid3", "TestPassword3"),
             new User(4, "TestUser4", "TestMinecraftUuid4", "TestPassword4"),
-            new User(5, "TestUser5", "TestMinecraftUuid5", "TestPassword5")
+            new User(5, "TestUser5", "TestMinecraftUuid5", "TestPassword5"),
+            new User(100, "duffie13", "duffie13", "password")
         ];
-        
+
         MockData.BankAccounts =
         [
-            new BankAccount(1, 100),
-            new BankAccount(2, 200),
-            new BankAccount(3, 300),
-            new BankAccount(4, 400),
-            new BankAccount(5, 500)
+            new BankAccount(1, "test1", 100),
+            new BankAccount(2, "test2", 200),
+            new BankAccount(3, "test3", 300),
+            new BankAccount(4, "test4", 400),
+            new BankAccount(5, "test5", 500)
         ];
-        
+
         MockData.Companies =
         [
             new Company(1, "AMZN", 5000),
             new Company(2, "CRIM", 1000),
             new Company(3, "KMRT", 500)
         ];
-        
+
         MockData.CompanyHistories =
         [
             new CompanyHistory(1, new DateTime(2024, 1, 1), 1000000, 200),
@@ -54,7 +57,7 @@ public class Tests
             new CompanyHistory(3, new DateTime(2024, 4, 1), 100000, 200),
             new CompanyHistory(3, new DateTime(2024, 5, 1), 100000, 200)
         ];
-        
+
         MockData.StockBalances =
         [
             new StockBalance(1, 1, 20),
@@ -68,11 +71,10 @@ public class Tests
             new StockBalance(4, 2, 3),
             new StockBalance(5, 2, 1)
         ];
-        
+
         Core.Init(new UserMockService(), new StockBalanceMockService(), new CompanyMockService(), new CompanyHistoryMockService(), new BankAccountMockService(), new TransientAuthenticationService());
     }
 
-    /*
     [Test]
     public void BankAccountCoreTest()
     {

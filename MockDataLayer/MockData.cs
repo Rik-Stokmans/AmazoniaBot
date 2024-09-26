@@ -14,5 +14,7 @@ public static class MockData
 
     public static List<CompanyHistory> CompanyHistories { get; set; } = [];
     
-    public static Dictionary<string, User> LoginCredentials { get; set; } = [];
+    public static List<StockOrder> StockOrders { get; set; } = [];
+    
+    public static List<ShopItem> ShopItems { get; set; } = [];
 }

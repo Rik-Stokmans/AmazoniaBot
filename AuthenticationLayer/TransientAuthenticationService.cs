@@ -24,8 +24,6 @@ public class TransientAuthenticationService : ITransientAuthenticationService
             Console.WriteLine($"Verification code for {user.Username}: {code}");
         }
         
-        
-        
         if (UserCodes.Any(x => x.Item2 == code))
         {
             UserCodes.RemoveAll(x => x.Item2 == code);
@@ -60,8 +58,6 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         BearerTokens.Add(bearer);
         
-        Console.WriteLine(BearerTokens.Count);
-        
         return bearer;
     }
     
@@ -94,16 +90,16 @@ public class TransientAuthenticationService : ITransientAuthenticationService
         
         if (token == null)
         {
-            return new RequestPermissions(false, true, []);
+            return new RequestPermissions();
         }
         
         var now = DateTime.Now;
         var valid = token.RefreshExpiryDate > now;
         var expired = token.ExpiryDate < now;
+
+        var discordId = token.DiscordId;
         
-        var allowedDiscordIds = new List<ulong> { token.DiscordId };
-        
-        return new RequestPermissions(valid, expired, allowedDiscordIds);
+        return new RequestPermissions(valid, expired, discordId);
     }
 }
 

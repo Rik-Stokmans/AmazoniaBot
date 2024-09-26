@@ -5,17 +5,6 @@ namespace LogicLayer.Interfaces.DataServices;
 public interface IBankAccountService
 {
     /// <summary>
-    /// Retrieves a specific bank account associated with the provided Discord ID.
-    /// </summary>
-    /// <param name="discordId">The Discord ID associated with the bank account.</param>
-    /// <returns>
-    /// A tuple containing:
-    /// - <see cref="DatabaseResult"/>: The result of the database query, indicating success or failure.
-    /// - <see cref="BankAccount"/>: The bank account associated with the specified Discord ID, or null if not found.
-    /// </returns>
-    public Task<(DatabaseResult, BankAccount)> GetBankAccount(ulong discordId);
-
-    /// <summary>
     /// Retrieves all bank accounts stored in the system.
     /// </summary>
     /// <returns>
@@ -25,6 +14,12 @@ public interface IBankAccountService
     /// </returns>
     public Task<(DatabaseResult, List<BankAccount>)> GetAllBankAccounts();
 
+    public Task<(DatabaseResult, List<BankAccount>)> GetAllBankAccounts(ulong discordId);
+    
+    public Task<(DatabaseResult, BankAccount)> GetBankAccount(int accountNumber);
+        
+    public Task<DatabaseResult> Pay(int accountNumber, long amount);
+    
     /// <summary>
     /// Creates a new bank account or updates an existing one in the system.
     /// </summary>
@@ -32,16 +27,22 @@ public interface IBankAccountService
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the operation.
     /// </returns>
-    public Task<DatabaseResult> CreateUpdateBankAccount(BankAccount bankAccount);
+    public Task<DatabaseResult> CreateBankAccount(BankAccount bankAccount);
+    
+    public Task<DatabaseResult> AddFunds(int accountNumber, long amount);
+    
+    public Task<DatabaseResult> TransferFunds(ulong sender, int accountNumber, int targetAccountNumber, long amount);
+    public Task<DatabaseResult> TransferAllFunds(ulong sender, int accountNumber, int targetAccountNumber);
 
     /// <summary>
     /// Deletes the bank account associated with the specified Discord ID.
     /// </summary>
     /// <param name="discordId">The Discord ID associated with the bank account to delete.</param>
+    /// <param name="accountNumber"></param>
     /// <returns>
     /// A <see cref="DatabaseResult"/> indicating the success or failure of the delete operation.
     /// </returns>
-    public Task<DatabaseResult> DeleteBankAccount(ulong discordId);
+    public Task<DatabaseResult> DeleteBankAccount(ulong discordId, int accountNumber);
     
     //TODO: add a transfer method to transfer funds between two bank accounts
 

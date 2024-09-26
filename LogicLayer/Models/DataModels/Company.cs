@@ -6,7 +6,7 @@ namespace LogicLayer.Models.DataModels;
 /// <param name="id">The unique identifier of the company.</param>
 /// <param name="stockSymbol">The stock symbol of the company.</param>
 /// <param name="totalShares">The total number of shares issued by the company.</param>
-public class Company(int id, string stockSymbol, int totalShares)
+public class Company(int id, ulong owner, string stockSymbol, int totalShares)
 {
     /// <summary>
     /// Gets or sets the unique identifier of the company.
@@ -15,6 +15,8 @@ public class Company(int id, string stockSymbol, int totalShares)
     /// An <see cref="int"/> representing the company's unique identifier.
     /// </value>
     public int Id { get; set; } = id;
+
+    public ulong OwnerId { get; set; } = owner;
 
     /// <summary>
     /// Gets or sets the stock symbol of the company.

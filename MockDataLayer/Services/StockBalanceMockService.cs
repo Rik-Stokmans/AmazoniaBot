@@ -5,51 +5,59 @@ namespace MockDataLayer.Services;
 
 public class StockBalanceMockService : IStockBalanceService
 {
-    public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(ulong discordId)
+    public Task<DatabaseResult> ChangeStockBalance(ulong discordId, int companyId, int shareAmount)
     {
-        var stockBalances = MockData.StockBalances.FindAll(sb => sb.DiscordId == discordId);
+        var stockBalance = MockData.StockBalances.Find(x => x.DiscordId == discordId && x.CompanyId == companyId);
         
-        return Task.FromResult(stockBalances.Count == 0
-            ? (DatabaseResult.NotFound, new List<StockBalance>())
-            : (DatabaseResult.Success, stockBalances));
-    }
-
-    public Task<(DatabaseResult, List<StockBalance>)> GetAllStockBalances(int companyId)
-    {
-        var stockBalances = MockData.StockBalances.FindAll(sb => sb.CompanyId == companyId);
-        
-        return Task.FromResult(stockBalances.Count == 0
-            ? (DatabaseResult.NotFound, new List<StockBalance>())
-            : (DatabaseResult.Success, stockBalances));
-    }
-
-    public Task<(DatabaseResult, List<StockBalance>)> GetAllStockBalances()
-    {
-        return Task.FromResult((DatabaseResult.Success, MockData.StockBalances));
-    }
-
-    public Task<DatabaseResult> CreateUpdateStockBalance(StockBalance stockBalance)
-    {
-        var existingStockBalance = MockData.StockBalances.Find(sb => sb.DiscordId == stockBalance.DiscordId && sb.CompanyId == stockBalance.CompanyId);
-        if (existingStockBalance != null)
-        {
-            existingStockBalance.ShareAmount = stockBalance.ShareAmount;
-            return Task.FromResult(DatabaseResult.Success);
-        }
-
-        MockData.StockBalances.Add(stockBalance);
-        return Task.FromResult(DatabaseResult.Success);
-    }
-
-    public Task<DatabaseResult> DeleteStockBalance(ulong discordId, int companyId)
-    {
-        var stockBalance = MockData.StockBalances.Find(sb => sb.DiscordId == discordId && sb.CompanyId == companyId);
         if (stockBalance == null)
         {
-            return Task.FromResult(DatabaseResult.NotFound);
+            if (shareAmount <= 0) return Task.FromResult(DatabaseResult.Fail);
+            
+            MockData.StockBalances.Add(new StockBalance(discordId, companyId, shareAmount));
+            return Task.FromResult(DatabaseResult.Success);
         }
+        
+        if (stockBalance.ShareAmount + shareAmount < 0) return Task.FromResult(DatabaseResult.Fail);
+        
+        stockBalance.ShareAmount += shareAmount;
+        return Task.FromResult(DatabaseResult.Success);
 
-        MockData.StockBalances.Remove(stockBalance);
+    }
+
+    public Task<(DatabaseResult, StockBalance)> GetStockBalance(ulong discordId, int companyId)
+    {
+        var stockBalance = MockData.StockBalances.Find(x => x.DiscordId == discordId && x.CompanyId == companyId);
+        return stockBalance == null 
+            ? Task.FromResult((DatabaseResult.Fail, new StockBalance(0, 0, 0))) 
+            : Task.FromResult((DatabaseResult.Success, stockBalance));
+    }
+
+    public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(ulong discordId)
+    {
+        var stockBalances = MockData.StockBalances.FindAll(x => x.DiscordId == discordId);
+        
+        return Task.FromResult((DatabaseResult.Success, stockBalances));
+    }
+    
+    public Task<(DatabaseResult, List<StockBalance>)> GetStockBalances(int companyId)
+    {
+        var stockBalances = MockData.StockBalances.FindAll(x => x.CompanyId == companyId);
+        
+        return Task.FromResult((DatabaseResult.Success, stockBalances));
+    }
+
+    public Task<DatabaseResult> TransferStockBalance(ulong fromDiscordId, ulong toDiscordId, int companyId, int shareAmount)
+    {
+        var fromStockBalance = MockData.StockBalances.Find(x => x.DiscordId == fromDiscordId && x.CompanyId == companyId);
+        var toStockBalance = MockData.StockBalances.Find(x => x.DiscordId == toDiscordId && x.CompanyId == companyId);
+        
+        if (fromStockBalance == null || toStockBalance == null) return Task.FromResult(DatabaseResult.Fail);
+        
+        if (fromStockBalance.ShareAmount - shareAmount < 0) return Task.FromResult(DatabaseResult.Fail);
+        
+        fromStockBalance.ShareAmount -= shareAmount;
+        toStockBalance.ShareAmount += shareAmount;
+        
         return Task.FromResult(DatabaseResult.Success);
     }
 }
