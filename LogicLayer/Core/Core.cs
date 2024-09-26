@@ -20,7 +20,7 @@ public static partial class Core
     /// <remarks>
     /// This method sets the internal state to indicate that initialization is complete.
     /// </remarks>
-    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ITransientAuthenticationService transientAuthenticationService, IStockOrderService stockOrderService)
+    public static void Init(IUserService userService, IStockBalanceService stockBalanceService, ICompanyService companyService, ICompanyHistoryService companyHistoryService, IBankAccountService bankAccountService, ITransientAuthenticationService transientAuthenticationService, IStockOrderService stockOrderService, IShopItemService shopItemService)
     {
         _bankAccountService = bankAccountService;
         _userService = userService;
@@ -28,6 +28,7 @@ public static partial class Core
         _stockBalanceService = stockBalanceService;
         _stockOrderService = stockOrderService;
         _companyService = companyService;
+        _shopItemService = shopItemService;
         _initialized = true;
     }
     
